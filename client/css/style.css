@@ -1,0 +1,68 @@
+body {
+    margin: auto;
+}
+
+#slideshow { 
+    margin: auto; 
+    position: relative; 
+    padding: 10px; 
+}
+
+#slideshow > div { 
+    position: absolute; 
+    top: 10px; 
+    left: 10px; 
+    right: 10px; 
+    bottom: 10px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+#guestbook > ul > li > .row {
+    padding: 5px;
+}
+
+#guestbook > ul > li > .row:nth-child(even) {
+    background: #ccc;
+    color: #ccc;
+}
+
+.odd {
+    background: #e6e6e6;
+    border-radius: 5px;
+}
+
+.even {
+    border-radius: 5px;
+}
+
+.guest-name {
+    font-weight: bold;
+}
+
+.glyphicon-thumbs-up {
+    cursor:pointer;
+}

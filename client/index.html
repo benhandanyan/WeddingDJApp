@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DJ APP</title>
+        <!-- CSS -->
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <!-- SCRIPTS -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js "></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+        <script src="/js/app.js" type="text/javascript"></script>
+        <script src="//cdn.socket.io/socket.io-1.3.5.js"></script>
+    </head>
+    <body ng-app="wedding">
+        <div class="container-fluid">
+            <nav class="navbar navbar-inverse" ng-controller="NavCtrl">
+                <div class="navbar-header">
+                    <a class="navbar-brand">DJ Wedding App</a>
+                </div>
+                <ul class="nav navbar-nav">
+                  <li ng-hide="isLoggedIn()"><a href="/#/slideshow">Slideshow</a></li>
+                  <li ng-hide="isLoggedIn()"><a href="/#/guestbook">Guestbook</a></li>
+                  <li ng-hide="isLoggedIn()"><a href="/#/playlist">Playlist</a></li>
+	              <li ng-show="isLoggedIn()"><a>{{ currentUser() }}</a></li>
+	              <li ng-show="isLoggedIn()"><a href="" ng-click="logOut()">Log Out</a></li>
+	              <li ng-hide="isLoggedIn()"><a href="/#/login">DJ Log In</a></li>
+	            </ul>
+            </nav>
+            
+            <ui-view></ui-view>
+            
+            <script type="text/ng-template" id="/home.html">
+
+            <div class="input-group">
+                <input id="searchtext" class="form-control" placeholder="Song/Artist" type="text"></input>
+                <span class="input-group-btn">
+                    <input type="button" id="searchbutton" class="btn btn-primary" value="Search YouTube" onclick="searchYoutube()">
+                </span>
+            </div>
+            <br>
+            <div id="player">
+              <iframe id="ytplayer" type="text/html" width="640" height="390"
+              src="https://www.youtube.com/embed?listType=search&list=weddingsongs"
+              frameborder="0"/> 
+            </div>
+            <br>
+            <ul style="list-style-type:none">
+                <li ng-repeat="song in songs | orderBy: '-upvotes'">
+                    <div class="row">
+                        <div class="col-sm-1" style="text-align:center;">
+                            <span class="upvotes" style="font-size:18px;color:#337ab7;">{{song.upvotes}}</span>
+                        </div>
+                        <span style="font-size:18px;">{{song.title}}</span> - 
+                        <span>requested by {{song.name}}</span> 
+                    </div>
+                </li>
+            </ul>
+            
+        </script>
+            
+        <script type="text/ng-template" id="/login.html">
+
+			<div ng-show="error" class="alert alert-danger row">
+			  <span>{{ error.message }}</span>
+			</div>
+
+			<form ng-submit="logIn()"
+			  style="margin-top:30px;">
+			  <h3>Log In</h3>
+
+			  <div class="form-group">
+			    <input type="text"
+			    class="form-control"
+			    placeholder="Username"
+			    ng-model="user.username"></input>
+			  </div>
+			  <div class="form-group">
+			    <input type="password"
+			    class="form-control"
+			    placeholder="Password"
+			    ng-model="user.password"></input>
+			  </div>
+			  <button type="submit" class="btn btn-primary">Log In</button>
+			</form>
+			<p>Contact site owner for credentials</p>
+		</script>
+		
+		<script type="text/ng-template" id="/slideshow.html">
+		    <!-- Photo upload form -->
+            <div class="row">
+                <form method="post" enctype="multipart/form-data" action="/file-upload">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                        <span class="file-input btn btn-default btn-file">
+                            Choose a photo!<input id="myFileInput" type="file" name="image" accept="image/*" capture="camera">
+                        </span>
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-1">-->
+                        <!--<div class="input-group">-->
+                        <input type="submit" class="btn btn-info" value="Submit">
+                        <div id="filename"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <br>
+            <div id="slideshow" class="collapse in"><img src="./img/loading.gif"></div>
+		</script>
+		
+		<script type="text/ng-template" id="/guestbook.html">
+		    <div id="guestbook-container" class="collapse-in">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Name</span>
+                            <input type="text" class="form-control" aria-describedby="basic-addon1" name="name" id="name">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Comment</span>
+        					<textarea class="form-control" aria-describedby="basicaddon1" name="comment" id="comment" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="input-group">
+                            <button id="submitcomment" type="button" class="btn btn-primary" ng-click="addPost()">Submit Comment</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="guestbook">
+                        <ul style="list-style-type:none">
+                            <li ng-repeat="post in posts" ng-class-odd="'odd'" ng-class-even="'even'">
+                                <div class="row">
+                                    <div class="col-sm-2 guest-name">{{post.name ? post.name : "Anonymous"}}</div>
+                                    <div class="col-sm-10 guest-comment">{{post.post}}</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+		</script>
+		
+		<script type="text/ng-template" id="/playlist.html">
+		    <div id="playlist-container" class="collapse-in">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Name</span>
+                            <input type="text" class="form-control" aria-describedby="basic-addon1" name="songname" id="songname">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Song Title/Artist</span>
+        					<input type="text" class="form-control" aria-describedby="basicaddon1" name="songtitle" id="songtitle"/>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="input-group">
+                            <button id="submitsong" type="button" class="btn btn-primary" ng-click="addPost()">Submit Song Request</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="songlist">
+                        <ul style="list-style-type:none">
+                            <li ng-repeat="song in songs | orderBy: '-upvotes'">
+                                <div class="row">
+                                    <div class="col-sm-1" style="text-align:center;">
+                                        <span class="upvotes" style="font-size:18px;color:#337ab7;">{{song.upvotes}}</span><br>
+                                        <span class="glyphicon glyphicon-thumbs-up" ng-click="increaseUpvotes(song)"></span>
+                                    </div>
+                                    <span style="font-size:18px;">{{song.title ? song.title : "N/A"}}</span><br>
+                                    <span>requested by {{song.name ? song.name : "Anonymous"}}	
+				    </span> 
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+		</script>
+    </body>
+</html>
