@@ -3,7 +3,6 @@ var path = require('path');
 var socketio = require('socket.io');
 var express = require('express');
 var fs = require('fs');
-var io = socketio.listen(server);
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 var passport = require('passport');
@@ -15,6 +14,7 @@ var bodyParser = require('body-parser');
 var router = express();
 var server = http.createServer(router);
 var auth = ejwt({secret: 'SECRET', userProperty: 'payload'});
+var io = socketio.listen(server);
 
 var images = [];
 var guestbook = [];

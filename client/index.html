@@ -54,7 +54,7 @@
                             <span class="upvotes" style="font-size:18px;color:#337ab7;">{{song.upvotes}}</span>
                         </div>
                         <span style="font-size:18px;">{{song.title}}</span> - 
-                        <span>requested by {{song.name}}</span> 
+                        <span>requested by {{song.name ? song.name : "Anonymous"}}</span> 
                     </div>
                 </li>
             </ul>
@@ -101,9 +101,10 @@
                     <!--</div>-->
                     <!--<div class="col-md-1">-->
                         <!--<div class="input-group">-->
-                        <input type="submit" class="btn btn-info" value="Submit">
+                        <input type="submit" class="btn btn-info" value="Submit" ng-disabled='true'>
                         <div id="filename"></div>
-                        </div>
+                        </div> 
+			<p> Submission is currently disabled for internal reasons </p>
                     </div>
                 </form>
             </div>

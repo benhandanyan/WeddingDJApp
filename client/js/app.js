@@ -244,7 +244,7 @@ function searchYoutube(){
 $(document).ready(function(){
     var socket = io.connect();
     var input = document.getElementById('myFileInput');
-    var images = [];
+    var images = ["beachwedding.jpg", "Wedding-Bands.jpg", "weddingcake.jpg", "weddingmusic.jpg"];
     
     // $("#searchbutton").on('click', function() {
     //     console.log('hi');
@@ -283,20 +283,22 @@ $(document).ready(function(){
         } else{
             picIndex = 0;
         }
+	console.log('images.length',images.length);
+	console.log('picIndex:', picIndex);
         setTimeout(slidePics, 3000);
     }
     slidePics();
     
-    socket.on("initialPic", function(data){
-       images = data;
-    });
-    socket.on('upload', function(data) {
-        console.log("upload received in app");
-        images.push(data);
-        console.log(images);
-        console.log("upload called");
+    //socket.on("initialPic", function(data){
+    //   images = data;
+    //});
+    //socket.on('upload', function(data) {
+    //    console.log("upload received in app");
+    //    images.push(data);
+    //    console.log(images);
+    //    console.log("upload called");
 
-    });
+    //});
     
 });
 
