@@ -174,7 +174,7 @@ app.controller('playlistCtrl', [
             playlist.createPost({name: $('#songname').val(), title: $('#songtitle').val(), upvotes: 0});
             $('#songtitle').val('');
       }
-    };
+    }
     $scope.increaseUpvotes = function(song) {
       playlist.upvote(song);
     }
@@ -200,7 +200,7 @@ app.controller('guestbookCtrl', [
               guest.createPost({name: $('#name').val(), post: $('#comment').val()});
               $('#comment').val('');
         }
-    }
+      }
 }])
 
 app.controller('AuthCtrl', [
@@ -246,35 +246,6 @@ $(document).ready(function(){
     var input = document.getElementById('myFileInput');
     var images = ["beachwedding.jpg", "Wedding-Bands.jpg", "weddingcake.jpg", "weddingmusic.jpg"];
     
-    // $("#searchbutton").on('click', function() {
-    //     console.log('hi');
-    //     $("#player").empty();
-    //     $("#player").append('<iframe id="ytplayer" type="text/html" width="640" height="390" src="https://www.youtube.com/embed?listType=search&autoplay=1&list=' + $("#searchtext").val() + '" frameborder="0"/>');
-    // });
-    
-    // $("#myFileInput").on('change', function() {
-    //     readFile(input.files[0]);
-    //     //document.getElementById("text").innerHTML = document.getElementById("textinput").value;
-    // });
-    // function readFile(file){
-    //     var reader = new FileReader();
-    //     var image = new Image();
-        
-    //     reader.readAsDataURL(file);
-    //     reader.onload = function(_file){
-    //         image.src = _file.target.result;
-    //         image.onload = function(){
-    //             //var w = this.width, h = this.height, t = file.type, n = file.name, s = ~~(file.size/1024) + 'KB';
-    //             //socket.emit('upload', {url:this.src});
-    //             //console.log('emitted upload');
-    //             $('#filename').innerHTML = file.name;
-    //             console.log(image.src);
-    //             reader = null;
-    //             image = null;
-    //         }
-    //     }
-    // }
-
     var picIndex = 0;
     function slidePics (){
         if(picIndex < images.length){
@@ -283,22 +254,7 @@ $(document).ready(function(){
         } else{
             picIndex = 0;
         }
-	console.log('images.length',images.length);
-	console.log('picIndex:', picIndex);
         setTimeout(slidePics, 3000);
     }
     slidePics();
-    
-    //socket.on("initialPic", function(data){
-    //   images = data;
-    //});
-    //socket.on('upload', function(data) {
-    //    console.log("upload received in app");
-    //    images.push(data);
-    //    console.log(images);
-    //    console.log("upload called");
-
-    //});
-    
 });
-
